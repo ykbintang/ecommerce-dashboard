@@ -4,6 +4,7 @@ import matplotlib.ticker as mticker
 import seaborn as sns
 import streamlit as st
 import plotly.express as px
+from datetime import datetime
 from babel.numbers import format_currency
 
 sns.set_style("darkgrid")
@@ -130,7 +131,7 @@ def create_customer_density_map(dataframe):
 all_df = pd.read_csv("all_data.csv")
 map_df = pd.read_csv("map_data.csv")
 
-# Change Data Type
+# Change data type
 datetime_columns = [
     "order_purchase_date",
     "order_approved_at",
@@ -147,7 +148,7 @@ all_df.reset_index(inplace=True)
 for column in datetime_columns:
     all_df[column] = pd.to_datetime(all_df[column])
 
-# Dashboard Title
+# Dashboard title
 st.header("Brazilian E-commerce Dashboard :sparkles:")
 
 # Filter data
@@ -157,7 +158,9 @@ max_date = all_df["order_purchase_date"].max()
 # Sidebar
 with st.sidebar:
     # Menambahkan logo perusahaan
-    st.image("./assets/logo.png")
+    st.image(
+        "https://raw.githubusercontent.com/ykbintang/ecommerce-dashboard/refs/heads/main/dashboard/assets/logo.png"
+    )
 
     # Membuat inputan tanggal
     start_date = st.date_input(
@@ -189,7 +192,7 @@ by_payment_type_df = create_customer_by_payment_type(main_df)
 bycity_df = create_customer_by_city(main_df)
 bystate_df = create_customer_by_state(main_df)
 
-# 1. Plot Number of Daily Orders
+# 1. Plot Number of daily orders
 st.subheader("Daily Orders")
 
 col1, col2 = st.columns(2)
@@ -217,7 +220,7 @@ ax.tick_params(axis="y", labelsize=20)
 ax.tick_params(axis="x", labelsize=20)
 st.pyplot(fig)
 
-# 2. Product Performance
+# 2. Product performance
 st.subheader("Best and Worst Performing Product by Number of Sales")
 
 colors = ["#009600", "#D3D3D3", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
@@ -254,7 +257,7 @@ ax[1].invert_xaxis()
 ax[1].yaxis.tick_right()
 st.pyplot(fig)
 
-# 3. Customers Spend Money
+# 3. Customers spend money
 st.subheader("Customers Spend Money per Month")
 
 fig, ax = plt.subplots(figsize=(16, 8))
@@ -271,7 +274,7 @@ ax.tick_params(axis="x", labelsize=15, rotation=45)
 plt.gca().yaxis.set_major_formatter(mticker.StrMethodFormatter("{x:.0f}"))
 st.pyplot(fig)
 
-# 4. Customers Review Score
+# 4. Customers review score
 st.subheader("Top 5 Category Product with Highest Review Score")
 
 fig, ax = plt.subplots(figsize=(16, 8))
@@ -288,10 +291,10 @@ ax.tick_params(axis="y", labelsize=25)
 ax.tick_params(axis="x", labelsize=25)
 st.pyplot(fig)
 
-# 5. Customer Demographics
+# 5. Customer demographics
 st.subheader("Customer Demographics")
 
-# By Payment Type
+# By Payment type
 fig, ax = plt.subplots(figsize=(10, 4))
 colors_ = ["#009600", "#D3D3D3", "#D3D3D3", "#D3D3D3"]
 sns.barplot(
@@ -311,7 +314,7 @@ st.pyplot(fig)
 col1, col2 = st.columns(2)
 
 with col1:
-    # By City
+    # By city
     fig, ax = plt.subplots(figsize=(10, 8.5))
     sns.barplot(
         data=bycity_df.head(),
@@ -328,7 +331,7 @@ with col1:
     st.pyplot(fig)
 
 with col2:
-    # By State
+    # By state
     fig, ax = plt.subplots(figsize=(10, 7))
     sns.barplot(
         data=bystate_df.head(),
@@ -345,7 +348,13 @@ with col2:
     st.pyplot(fig)
 
 
-# 6. Customer Density Map
+# 6. Customer density map
 st.subheader("Customer Density Map")
 fig = create_customer_density_map(map_df)
 st.plotly_chart(fig)
+
+# Membuat copyright dinamis
+current_year = datetime.now().year
+st.caption(
+    f"Copyright © {current_year} Brazilian E-commerce Dashboard. Made with :heart: by **binn.fnc**"
+)
