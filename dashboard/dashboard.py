@@ -128,8 +128,8 @@ def create_customer_density_map(dataframe):
 
 
 # Load cleaned data
-all_df = pd.read_csv("all_data.csv")
-map_df = pd.read_csv("map_data.csv")
+all_df = pd.read_csv("./dashboard/all_data.csv")
+map_df = pd.read_csv("./dashboard/map_data.csv")
 
 # Change data type
 datetime_columns = [
